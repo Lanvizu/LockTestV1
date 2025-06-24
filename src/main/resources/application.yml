@@ -1,0 +1,21 @@
+# local 환경
+spring:
+  profiles:
+    default: local
+  datasource:
+    url: jdbc:mysql://localhost:3306/lock_test_db
+    username: root
+    password: 1234
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: create
+    show-sql: true
+#  data:
+#    redis:
+#      host: localhost
+#      port: 6379
+#
+#logging:
+#  level:
+#    org.springframework.cache: trace # Redis 사용에 대한 로그가 조회되도록 설정
