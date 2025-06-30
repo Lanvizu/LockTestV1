@@ -2,9 +2,12 @@ package Test.LockTestV1.jvmLock.service;
 
 import Test.LockTestV1.jvmLock.domain.ProductV3;
 import Test.LockTestV1.jvmLock.repository.ProductRepositoryV3;
+import Test.LockTestV1.performance.PerformanceMeasure;
+import Test.LockTestV1.performance.PerformanceMeasureExtension;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -17,6 +20,7 @@ import java.util.stream.IntStream;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @SpringBootTest
+@ExtendWith(PerformanceMeasureExtension.class)
 class ProductServiceV3Test {
 
     @Autowired
@@ -25,7 +29,7 @@ class ProductServiceV3Test {
     @Autowired
     private ProductFacade productFacade;
 
-    private static final int INITIAL_STOCK = 20;
+    private static final int INITIAL_STOCK = 100;
     private static Long PRODUCT_ID;
 
     @BeforeEach
@@ -36,10 +40,11 @@ class ProductServiceV3Test {
     }
 
     @Test
-    @DisplayName("JvmLock - 동시에 20명 재고 감소 테스트")
+    @DisplayName("JvmLock - 동시에 100명 재고 감소 테스트")
+    @PerformanceMeasure("JvmLock - 동시에 100명 재고 감소 테스트")
     void decreaseStockConcurrently() throws InterruptedException {
         // given
-        final int TOTAL_USERS = 20;
+        final int TOTAL_USERS = 100;
         CountDownLatch latch = new CountDownLatch(TOTAL_USERS);
         AtomicInteger successCount = new AtomicInteger(0);
 
@@ -54,8 +59,8 @@ class ProductServiceV3Test {
         // then
         int finalStock = productRepositoryV3.findById(PRODUCT_ID).orElseThrow().getStock();
 
-        System.out.println("성공적으로 실행한 횟수: " + successCount.get());
-        System.out.println("최종 재고: " + finalStock);
+//        System.out.println("성공적으로 실행한 횟수: " + successCount.get());
+//        System.out.println("최종 재고: " + finalStock);
 
         // 요청과 최종 재고 모두 정상 작동
         assertThat(successCount.get()).isEqualTo(INITIAL_STOCK);

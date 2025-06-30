@@ -19,7 +19,7 @@ public class ProductServiceV2 {
     public boolean decreaseStockByOptimisticLock(Long productId) {
         try {
             ProductV2 product = productRepositoryV2.findById(productId).orElseThrow();
-            log.info("{}개 입니다.", product.getStock());
+//            log.info("{}개 입니다.", product.getStock());
             if (product.getStock() == 0) {
                 return false;
             }

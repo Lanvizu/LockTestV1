@@ -18,7 +18,7 @@ public class ProductServiceV1 {
     public boolean decreaseStock(Long productId) {
         ProductV1 product = productRepository.findById(productId)
                 .orElseThrow(() -> new RuntimeException("Product not found"));
-        log.info("{}개 입니다.", product.getStock());
+//        log.info("{}개 입니다.", product.getStock());
         if(product.getStock() == 0) return false;
         product.decreaseStock();
         productRepository.saveAndFlush(product);

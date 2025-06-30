@@ -16,10 +16,7 @@ public class ProductFacade {
 
     public boolean decreaseStockByJvmLock(Long productId) {
         synchronized (lock) {
-            ProductV3 product = productServiceV3.findById(productId);
-            if (product.getStock() == 0) return false;
-            productServiceV3.doDecreaseStock(productId);
-            return true;
+            return productServiceV3.doDecreaseStock(productId);
         }
     }
 }
