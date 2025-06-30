@@ -15,10 +15,14 @@ public class ProductServiceV3 {
     private final ProductRepositoryV3 productRepositoryV3;
 
     @Transactional
-    public void doDecreaseStock(Long productId) {
+    public boolean doDecreaseStock(Long productId) {
         ProductV3 product = productRepositoryV3.findById(productId).orElseThrow();
-        log.info("{}개 입니다.", product.getStock());
+        if (product.getStock() <= 0) {
+            return false;
+        }
+//        log.info("{}개 입니다.", product.getStock());
         product.decreaseStock();
+        return true;
     }
 
     public ProductV3 findById(Long productId) {
